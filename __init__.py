@@ -1,0 +1,1 @@
+from .mfbot import MFBot

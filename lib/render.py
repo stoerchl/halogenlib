@@ -3,7 +3,7 @@
 import datetime
 
 
-def yara_print_rule(self, l):
+def yara_print_rule(self, l, malware=None):
     """ iterate over the list, and print a string for each rule
     parameter: l - list of rules"""
     if self.name:
@@ -23,6 +23,8 @@ def yara_print_rule(self, l):
             fname = "Directory: {0} ".format(dir_path)
     else:
         fname = self.yara_base_file
+    if not malware:
+        malware = "malware family"
 
     rule_string = """\
 rule {rname} : maldoc image
@@ -31,14 +33,9 @@ rule {rname} : maldoc image
         tlp = "amber"
         author = "Halogen Generated Rule"
         date = "{date}"
-        md5 = "{md5_hash}"
-        family = "malware family"
-        filename = "{input_file}"
-        scope = "['detection', 'collection']"
-        intel = "['']"
+        family = {malware}
     strings:
-""".format(rname=rname, md5_hash=md5val, date=str(datetime.date.today()),
-           input_file=fname)
+""".format(rname=rname, date=str(datetime.date.today()), malware=malware)
     for i in range(0, len(l)):
         rule_dict = l[i]
         ftype = rule_dict['format'].lower()
@@ -52,4 +49,4 @@ rule {rname} : maldoc image
     condition:
         any of them
 }"""
-    print(rule_string)
+    return rule_string, rname
