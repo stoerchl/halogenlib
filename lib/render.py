@@ -33,7 +33,7 @@ rule {rname} : maldoc image
         tlp = "amber"
         author = "Halogen Generated Rule"
         date = "{date}"
-        family = {malware}
+        family = "{malware}"
     strings:
 """.format(rname=rname, date=str(datetime.date.today()), malware=malware)
     for i in range(0, len(l)):
